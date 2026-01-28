@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     chart: pihole
-    repoURL: https://mojo2600.github.io  # The Pi-hole Helm Repo
+    repoURL: https://mojo2600.github.io/pihole-kubernetes/  # The Pi-hole Helm Repo
     targetRevision: 2.21.0 # Use the specific version you need
     helm:
       values: |
