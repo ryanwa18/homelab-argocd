@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pihole
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: pihole
+    repoURL: https://mojo2600.github.io  # The Pi-hole Helm Repo
+    targetRevision: 2.21.0 # Use the specific version you need
+    helm:
+      values: |
+        serviceDns:
+          type: LoadBalancer
+          loadBalancerIP: "192.168.1.246"
+          annotations:
+            metallb.universe.tf/allow-shared-ip: "pihole-svc"
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          hosts:
+            - pihole.local
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pihole # The namespace to install Pi-hole into
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
