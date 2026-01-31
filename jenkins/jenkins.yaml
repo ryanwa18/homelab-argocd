@@ -15,9 +15,11 @@ spec:
           enabled: true
           ingressClassName: traefik
           hosts:
-            - jenkins.local
+            - host: jenkins.local
+              paths:
+                - /
           annotations:
-            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.entrypoints: web
   destination:
     server: https://kubernetes.default.svc
     namespace: jenkins
