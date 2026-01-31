@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: jenkins
+    repoURL: https://charts.jenkins.io
+    targetRevision: 5.8.134
+    helm:
+      values: |
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          hosts:
+            - jenkins.local
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jenkins
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
