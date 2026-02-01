@@ -5,30 +5,37 @@ metadata:
   namespace: argocd
 spec:
   project: default
+
   source:
+    repoURL: https://mojo2600.github.io/pihole-kubernetes/
     chart: pihole
-    repoURL: https://mojo2600.github.io/pihole-kubernetes/  # The Pi-hole Helm Repo
-    targetRevision: 2.21.0 # Use the specific version you need
+    targetRevision: 2.21.0
     helm:
+      releaseName: pihole
       values: |
         serviceDns:
           type: LoadBalancer
-          loadBalancerIP: "192.168.1.246"
+          loadBalancerIP: 192.168.1.246
           annotations:
             metallb.universe.tf/allow-shared-ip: "pihole-svc"
+
         ingress:
           enabled: true
           ingressClassName: traefik
-          hosts:
-            - pihole.local
           annotations:
             traefik.ingress.kubernetes.io/router.entrypoints: web
+          hosts:
+            - host: pihole.local
+              paths:
+                - /
+
   destination:
     server: https://kubernetes.default.svc
-    namespace: pihole # The namespace to install Pi-hole into
+    namespace: pihole
+
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
