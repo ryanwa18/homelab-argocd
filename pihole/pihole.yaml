@@ -22,7 +22,7 @@ spec:
           hosts:
             - pihole.local
           annotations:
-            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.entrypoints: web
   destination:
     server: https://kubernetes.default.svc
     namespace: pihole # The namespace to install Pi-hole into

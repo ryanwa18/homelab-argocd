@@ -11,16 +11,16 @@ spec:
     targetRevision: 5.8.134
     helm:
       values: |
-        ingress:
-          enabled: true
-          ingressClassName: traefik
-          hosts:
-            - host: jenkins.local
-              paths:
-                - /
-          annotations:
-            traefik.ingress.kubernetes.io/router.entrypoints: web
-  destination:
+        controller:
+          serviceType: ClusterIP
+          servicePort: 80
+          targetPort: 8080
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            hostName: jenkins.local
+            annotations:
+              traefik.ingress.kubernetes.io/router.entrypoints: web
     server: https://kubernetes.default.svc
     namespace: jenkins
   syncPolicy:
